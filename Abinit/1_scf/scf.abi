@@ -1,0 +1,82 @@
+################################################################################
+# PREAMBLE
+################################################################################
+outdata_prefix "./outdata/scf"                                                  # path prefix for output data files for output data files
+ndtset 9                                                                        # number of datasets (one for each 'ecut' value considered)
+
+################################################################################
+# UNIT CELL
+################################################################################
+acell 6.74 6.74 6.74                                                            # [Bohr] length scales by which dimensionless primitive translation vectors 'rprim' are multiplied
+rprim  0.0  0.5  0.5                                                            # dimensionless primitive translation vectors
+       0.5  0.0  0.5
+       0.5  0.5  0.0
+
+################################################################################
+# ATOM TYPES
+################################################################################
+ntypat 1                                                                        # number of atom types
+znucl 6                                                                         # atomic number of the atom types (space-separated)
+pp_dirpath "../pseudos/pseudo-dojo_nc_sr_pbe_standard"                          # path to directory containing pseudopotentials (within quotation marks)
+pseudos "C.psp8"                                                                # pseudopotential file names (within quotation marks, comma-separated)
+
+################################################################################
+# ATOMS
+################################################################################
+natom 2                                                                         # number of atoms in the unit cell
+typat 1 1                                                                       # type of the atoms within the unit cell (space separated, must be consistent with 'znucl' and 'pseudos' order)
+xred  0   0   0                                                                 # atom fractional coordinates within unit cell
+      1/4 1/4 1/4
+
+################################################################################
+# PLANE-WAVE BASIS SET
+################################################################################
+ecut1 29.0
+ecut2 31.0
+ecut3 33.0
+ecut4 35.0                                                                       # [Ha] cut-off energy; the integer appended to 'ecut' identifies the dataset
+ecut5 37.0
+ecut6 39.0
+ecut7 40.0
+ecut8 41.0
+ecut9 43.0
+
+################################################################################
+# PLANE-WAVE BASIS SET
+################################################################################
+ecut 35.0                                                                       # [Ha] plane-wave cut-off energy (recommended values at http://www.pseudo-dojo.org/)
+
+################################################################################
+# k-POINT GRID (see https://journals.aps.org/prb/abstract/10.1103/PhysRevB.13.5188)
+################################################################################
+kptopt 1                                                                        # method to set-up k-points;
+                                                                                # 1: symmetry accounted for,
+                                                                                # so that only k-points within irreducible BZ generated,
+                                                                                # with appropriate symmetry-defined weights (degeneracy);
+                                                                                # prevents redundancy
+ngkpt 4 4 4                                                                     # number of points per grid
+nshiftk 4                                                                       # number of shifted grids to be used concurrently
+shiftk 0.5  0.5  0.5                                                            # k-grid shift vectors; this combination is very efficient for FCC lattice;
+       0.5  0.0  0.0                                                            # other choices might be more suitable for other lattices
+       0.0  0.5  0.0                                                            # (see https://docs.abinit.org/variables/basic/#shiftk)
+       0.0  0.0  0.5
+
+################################################################################
+# SCF PROCEDURE
+################################################################################
+nstep 10                                                                        # max. number of SCF cycles
+toldfe 1.0d-6                                                                   # convergence criterion: absolute energy difference between two consecutive steps
+diemac 12.0                                                                     # (optional) pre-conditioning of macroscopic dielectric constant;
+                                                                                # might significantly speed up computation
+                                                                                # (see https://docs.abinit.org/variables/gstate/#diemac)
+################################################################################
+# DOPING + EVENTUAL FERMI SURFACE (UNCOMMENT IF NEEDED) - VERY LARGE VALUES USED TO MAKE THE EFFECT VERY VISIBLE
+################################################################################
+cellcharge 0.05                                                                 # unit cell charge in number of electrons; e.g., to treat a system missing one electron per unit cell, set se to +1 (I use -0.5 for n-doping, 0.75 for p-doping)
+occopt 4                                                                        # controls how occupation of electronic states is handled (see https://docs.abinit.org/variables/basic/#occopt)
+                                                                                # when occopt = 4, the "cold smearing" of Marzari is used
+                                                                                # smearing improves convergence w.r.t. to BZ sampling in metals, where state occupation drops suddenly to zero as Fermi level crossed
+                                                                                # otherwise, a very fine mesh would be needed for accurate integration around the discontinuity
+tsmear 0.01                                                                     # [Ha] "temperature" of smearing
+
+# nband 7                                                                         ## two more than the number of bands needed in the si1 (1_scf) 
